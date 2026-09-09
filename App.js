@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StatusBar, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform, Alert, ActivityIndicator } from 'react-native';
+import {  View,  Text,  StatusBar,  ScrollView,  TouchableOpacity,  KeyboardAvoidingView,  Platform,  Alert,  ActivityIndicator } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+
 import { styles } from './app.styles';
+import { colors } from './src/constants/colors';
 import { Input } from './src/components/input';
 import { ResultCard } from './src/components/resultCard';
 import { CurrencySelector } from './src/components/currencySelector';
+
 import { fetchExchangeRate } from './src/services/api';
 import { convertCurrency } from './src/utils/convert';
-export default function App() {
 
+export default function App() {
   const [amount, setAmount] = useState('');
   const [fromCurrency, setFromCurrency] = useState('USD');
   const [toCurrency, setToCurrency] = useState('BRL');
@@ -61,69 +65,79 @@ export default function App() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <StatusBar barStyle="light-content" />
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={styles.content}>
 
-          <View style={styles.header}>
-            <Text style={styles.title}>Conversor de Moeda</Text>
-            <Text style={styles.subtitle}>Cotações do mundo em tempo real</Text>
-          </View>
+      <LinearGradient
+        colors={['#25252B', '#1E1E24', '#18181D']}
+        style={styles.gradientBackground}
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={styles.content}>
 
-          <View style={styles.card}>
-            <Text style={styles.label}>De:</Text>
+            <View style={styles.header}>
+              <Text style={styles.title}>Conversor Global</Text>
+              <Text style={styles.subtitle}>Cotações de todo o mundo em tempo real</Text>
+            </View>
 
-            <CurrencySelector
-              selectedValue={fromCurrency}
-              currencies={availableCurrencies}
-              onSelect={setFromCurrency}
+            <View style={styles.card}>
+              <Text style={styles.label}>De:</Text>
+
+              <CurrencySelector
+                selectedValue={fromCurrency}
+                currencies={availableCurrencies}
+                onSelect={setFromCurrency}
+              />
+
+              <Input
+                label="Valor:"
+                value={amount}
+                onChangeText={setAmount}
+              />
+            </View>
+
+            <TouchableOpacity style={styles.swapButton} onPress={swapCurrency} activeOpacity={0.7}>
+              <Text style={styles.swapButtonText}>↕</Text>
+            </TouchableOpacity>
+
+            <View style={styles.card}>
+              <Text style={styles.label}>Para:</Text>
+
+              <CurrencySelector
+                selectedValue={toCurrency}
+                currencies={availableCurrencies}
+                onSelect={setToCurrency}
+              />
+            </View>
+
+            <TouchableOpacity
+              style={[styles.convertTouchable, (!amount || loading) && styles.convertButtonDisabled]}
+              onPress={handleConvert}
+              disabled={!amount || loading}
+              activeOpacity={0.85}
+            >
+              <LinearGradient
+                colors={(!amount || loading) ? ['#2A2A30', '#2A2A30'] : ['#FF007F', '#00F0FF']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.convertButtonGradient}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#FFF" />
+                ) : (
+                  <Text style={styles.convertButtonText}>Converter</Text>
+                )}
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <ResultCard
+              result={result}
+              exchangeRate={exchangeRate}
+              fromCurrency={fromCurrency}
+              toCurrency={toCurrency}
             />
 
-            <Input
-              label="Valor:"
-              value={amount}
-              onChangeText={setAmount}
-            />
           </View>
-
-
-          <TouchableOpacity style={styles.swapButton} onPress={swapCurrency}>
-            <Text style={styles.swapButtonText}>↑↓</Text>
-          </TouchableOpacity>
-
-
-          <View style={styles.card}>
-            <Text style={styles.label}>Para:</Text>
-
-            <CurrencySelector
-              selectedValue={toCurrency}
-              currencies={availableCurrencies}
-              onSelect={setToCurrency}
-            />
-          </View>
-
-          <TouchableOpacity
-            style={[styles.convertButton, (!amount || loading) && styles.convertButtonDisabled]}
-            onPress={handleConvert}
-            disabled={!amount || loading}
-            activeOpacity={0.7} 
-          >
-            {loading ? (
-              <ActivityIndicator color="#FFF" />
-            ) : (
-              <Text style={styles.convertButtonText}>Converter</Text>
-            )}
-          </TouchableOpacity>
-
-
-          <ResultCard
-            result={result}
-            exchangeRate={exchangeRate}
-            fromCurrency={fromCurrency}
-            toCurrency={toCurrency}
-          />
-
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </LinearGradient>
     </KeyboardAvoidingView>
   );
 }

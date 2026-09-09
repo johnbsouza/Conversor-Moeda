@@ -3,7 +3,7 @@ import { styles } from './styles';
 
 export function Button({ currency, variant = 'primary', isSelected, onPress }) {
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={[
         styles.button,
         isSelected && (variant === 'primary' ? styles.primary : styles.secondary)

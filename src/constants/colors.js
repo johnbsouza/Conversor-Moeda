@@ -1,11 +1,11 @@
 export const colors = {
-  background: '#0F172A',
-  text: '#F8FAFC',
-  textSecondary: '#94A3B8',
-  inputBackground: 'rgba(255, 255, 255, 0.07)',
-  cardBackground: 'rgba(30, 41, 59, 0.7)',
-  cardBorder: 'rgba(255, 255, 255, 0.1)',
-  primary: '#6366F1',    // Índigo moderno
-  secondary: '#10B981',
-  disabled: 'rgba(255, 255, 255, 0.03)'
+  background: '#1E1E24',           
+  text: '#FFFFFF',
+  textSecondary: '#9A9AAB',        
+  inputBackground: '#16161A',     
+  cardBackground: '#141418',      
+  cardBorder: '#2E2E38',          
+  primary: '#00F0FF',           
+  secondary: '#FF007F',           
+  disabled: '#2A2A35'
 };
